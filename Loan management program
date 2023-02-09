@@ -1,0 +1,378 @@
+#install modules and those libraries 
+from tkinter import *
+from tkcalendar import *
+from openpyxl import workbook, load_workbook
+from tkinter import messagebox
+from docx import Document
+from datetime import datetime
+from docx.shared import Cm
+
+#submite fuction all in one
+
+def write():
+    #getting info from widget's demostraction variables
+    firstname_info=firstname.get()
+    lastname_info=lastname.get()
+    surname_info=surname.get()
+    gender1_info=  text=checkvar1.get()
+    gender2_info= text=checkvar2.get()
+    kind= str(gender1_info) +str(gender2_info)
+    age_info=age1.get()
+    id_info=id_entry.get()
+    phonenumber_info=phonenumber.get()
+    accountnumber_info=account_number.get()
+    cardnumber_info=cardnumber_STR.get()
+    clicked_info=clicked.get()
+    creditrequest_info=credit_request.get()
+    payday_info=pay_day.get_date()
+    salary_info=salary_l.get_date()
+    interest_info=interest1.get()
+    controller_info=controller_STR.get()
+    work_pc_info=work_pc_STR.get()
+    occupation_info=occupation_STR.get()
+    netsalary_info=netsalary_STR.get()
+    name_relat_info=name_relat_STR.get()
+    spause_info=spause_STR.get()
+    resental_info=resental_STR.get()
+  
+    #primer detail oparation
+    credit_f=str("R")+str(creditrequest_info)
+    interest_inxls=str(interest_info) + str("%")
+    
+    total=int(interest_info)/1*int(creditrequest_info) /100 +int(creditrequest_info)
+    total_ff=str("R") + str(total)
+    total2=interest_info/1*int(creditrequest_info) /100 
+    total_f=str("R") +str(total2)
+    file_fn=firstname_info
+    file_ln=lastname_info
+    file_sn=surname_info
+    file_id=id_info
+    file_ids=str(file_id[10:13])
+    file_fns=str((file_fn[0:1])) 
+    file_lns=str((file_ln[0:1])) 
+    file_sns=str((file_sn[0:1])) 
+    files=file_fns+file_lns+file_sns+file_ids
+    date=str(datetime.now())
+    
+  
+   
+    #file oparation inserting collected data from get function
+    file = open("loaners.txt", "a")
+    file.write("\n _______________________")
+    file.write("\nDATE: " +date)
+    file.write("\n Controoler info " +controller_info)
+    file.write("\n First name: " + firstname_info)
+    file.write("\n Last name: " + lastname_info) 
+    file.write("\n Surname: "+ surname_info)
+    file.write("\n Gender: "+kind) 
+    file.write("\n Age: "+age_info)
+    file.write("\n ID Number: " +id_info)
+    file.write("\n Phone number: " +phonenumber_info)
+    file.write("\n Address: " +   resental_info)
+    file.write("Relectives: " +  name_relat_info)
+    file.write("Name of spause and Contacts: " +  spause_info)
+    file.write("\n account number: " + accountnumber_info)
+    file.write("\n Card number: " + cardnumber_info)
+    file.write("\n Bank branch: " + clicked_info)
+    file.write("\n Work place: " + work_pc_info)
+    file.write("\n Occupation: " + occupation_info)
+    file.write("\n Netsalary: " + netsalary_info)
+    file.write("\n Salary DAy" + salary_info)
+    file.write("\n Credit request: " + credit_f) 
+    file.write("\n With Interest: " +str(total_ff))
+    file.write("\n Of interest: " +str(total_f)) 
+    file.write(" \n Interest: " +str(interest_inxls))
+    file.write("\n Pay_Day: " +payday_info) 
+    file.write(" \n file_n: "+str(files)) 
+    file.close()
+    #pyxl automation inserting data from get fuction 
+    wb= load_workbook('loaners.xlsx')
+    ws=wb.active
+    ws['A1']="First_N"
+    ws['B1'] ="Last_N"
+    ws['C1'] ="Surname"
+    ws['D1'] ="Gender"
+    ws['E1'] ="Age"
+    ws['F1'] ="ID_Num"
+    ws['G1']="Phone_N"
+    ws['H1']= "account"
+    ws['I1'] ="Card Number"
+    ws['J1']="Bank branch"
+    ws['K1']="Work place"
+    ws['L1']="Occupation"
+    ws['M1']="Netsalary"
+    ws['N1']="Credit request"
+    ws['O1']="Wtih interest"
+    ws['P1']="f interest"
+    ws['Q1']="Interest"
+    ws['R1']="Payday"
+    ws['S1']="Salary_day"
+    ws['T1']="Controller"
+    ws['U1']="File_N"
+    ws['V1']="Application_Day"
+
+    
+   
+    ws.append([firstname_info,lastname_info,surname_info,kind , age_info , id_info, phonenumber_info, accountnumber_info,cardnumber_info,clicked_info,work_pc_info,occupation_info,netsalary_info,credit_f,total_ff,total_f,interest_inxls,payday_info,salary_info, controller_info,files,date])
+    wb.save('loaners.xlsx')
+    document=Document()
+
+    header_section=document.sections[0]
+    header=header_section.header
+    header_text=header.paragraphs[0]
+
+    header_text.text="PARIS CASH LOANS(PTY) LTD\nREG NO:2016/490927/07\nP.O.BOX 79,LUPHISA 1217\nSTAND NO:90LUPHISA 2017\n0799737227"
+    d=document.add_picture('img.jpg',width=Cm(5))
+
+
+    document.add_heading('                                     CASH LOAN AGREEMENT',1)
+
+    document.add_paragraph('                                    \nCONTROLLER INFO: ').add_run(controller_info.capitalize()).underline=True
+    document.add_paragraph('CLIENT INFORMATION')
+    n= document.add_paragraph('NAME AND SURNAME: ')
+    n.add_run( firstname_info.capitalize())
+    n.add_run(" " +lastname_info.capitalize()).underline=True
+    n.add_run(" " +surname_info.capitalize()).underline=True
+    document.add_paragraph('CONTACT NUMBER: ').add_run( phonenumber_info).underline=True
+    document.add_paragraph('WORKPLACE AND CONTACT: ').add_run(work_pc_info.capitalize()).underline=True
+    document.add_paragraph('OCCUPATION: ').add_run(occupation_info.capitalize()).underline=True
+    document.add_paragraph('NET SALARY: ').add_run(netsalary_info).underline=True
+    document.add_paragraph('SALARY DAY: ').add_run( salary_info).underline=True
+    sp= document.add_paragraph('NAME OF SPAUSE AND CONTACT: ' )
+    sp.add_run(spause_info.capitalize()).underline=True
+    document.add_paragraph('NAME OF RELATIVE/SIBLINGS AND CONTACT:  ').add_run( name_relat_info.capitalize()).underline=True
+    document.add_paragraph('RESIDENTAL ADDRESS(school,clinic,shop,tarven,ect) ').add_run(resental_info.capitalize()).underline=True
+    p=document.add_paragraph('FOR I ')
+    p.add_run( firstname_info.capitalize()).underline=True
+    p.add_run(" "+lastname_info.capitalize()).underline=True
+    p.add_run(" "+surname_info.capitalize()).underline=True
+    p.add_run(" ID ")
+    p.add_run(str(" "+ id_info)).underline=True
+    p.add_run(' HAVE BORROWERD FROM PARIS CASH LOAN ;ON THE ')
+    p.add_run(date)
+    p.add_run('  WITH AN INTEREST RATE OF ')
+    p.add_run(str(interest_inxls))
+    p.add_run(' TO BE CHARGED ON THE CAPITAL AMOUNT AND LEAVE MY ID BOOK')
+    records={
+        (credit_f,total_ff,payday_info)
+        }
+    table = document.add_table(rows=1,cols=3)
+    hdr_cells= table.rows[0].cells
+    hdr_cells[0].text="AMOUNT BORROWED"
+    hdr_cells[1].text="WITH_INTEREST"
+    hdr_cells[2].text="PAY DAY"
+    for amount_borrowed,with_interest,paying_day in records:
+        row_cells=table.add_row().cells
+        row_cells[0].text=str(amount_borrowed)
+        row_cells[1].text=with_interest
+        row_cells[2].text=paying_day
+
+       
+    document.add_paragraph('\nI DECLARE THAT I FAIL TO PAY THE BALANCE/AMOUNT DUE TO 7 DAYS AFTER THE DUE DATE,50% INTEREST RATE WOULD BE CHARGED ON THE AMONT DUE TO PROPERTY MAY BE TAKEN TO REPLACE THE BALANCE/AMONT DUE.')
+
+    d= document.add_paragraph('                            SIGNED ON THE ')
+    d.add_run(date).underline=True
+    s=document.add_paragraph('\nCLIENT SIGNATURE_____________________')
+    s.add_run('                    CONTROLLER SIGNATURE__________________')
+    document.add_page_break()
+    save_as=str(files) + str(".docx")
+
+
+    document.save(save_as)
+
+
+
+    #deleting all infor from widgts after fuction oparation complete
+    firstname_entry.delete(0, END)
+    lastname_entry.delete(0, END)
+    surname_entry.delete(0, END)
+    account_entry.delete(0 ,END)
+    phonenumber.delete(0, END)
+    age_entry.delete(0,END) 
+    credit_entry.delete(0, END)
+    id_entry.delete(0,END) 
+    interest_entry.delete(0,END)
+    cardnumber_entry.delete(0,END)
+    controller_entry.delete(0,END)
+    work_pc_entry.delete(0,END)
+    occupation_entry.delete(0,END)
+    netsalary_entry.delete(0,END)
+    spause_entry.delete(0,END)
+    texxt.delete(0,END)
+    name_relat_entry.delete(0,END)
+    
+
+
+root=Tk()
+root.title("Loan app")
+root.geometry("500x400")
+root.maxsize(1000,800 )
+
+    
+
+intro=Label(root, text="Loan Application Program:",  bg="grey",fg="black", width="500", height="3") 
+intro.pack()
+
+first_name= Label(root,text="Enter First Name:")
+first_name.place(x=10, y=175)
+last_name= Label (root, text="Enter Last Name:")
+last_name.place(x=10, y=230)
+surname =Label (root, text ="Enter Surname:")
+surname.place(x=10,y =300)
+phone_number=Label(root, text="Phone Number :") 
+phone_number.place(x=10, y=647)
+
+age=Label(root, text="Enter Age :") 
+age.place(x=10, y=385)
+interests_f=Label(root, text="Enter Interest:")
+interests_f.place(x=800,y=75)
+id=Label(root, text="Enter ID Number:")
+id.place(x=10, y=415)
+
+account_number=Label(root, text="Account Number :")
+account_number.place(x=10, y=465)
+cardnumber=Label(root,text="Card Number")
+cardnumber.place(x=10,y=508)
+
+
+controller_text= Label(root,text="CONTROLER_INFO!")
+controller_text.place(x=400,y=85)
+work_pc=Label(root,text="Workplace And Contact:")
+work_pc.place(x=400,y=155)
+occupation=Label(root,text="Occupation:")
+occupation.place(x=400,y=210)
+netsalary= Label(root,text="Net Salary:")
+netsalary.place(x=400,y=258)
+name_relative=Label(root,text="Name of Relative/Sibling And Contact")
+name_relative.place(x=400,y=300)
+spause_l=Label(root,text="Spause and Contacts:")
+spause_l.place(x=400,y=355)
+residental= Label(root,text="Residental Address(School,Clinic,tavern ect:")
+residental.place(x=400,y=408)
+ 
+
+
+pd=Label(root,text="Pay Day")
+pd.place(x=790,y=188,)
+
+credit_request=Label(root, text="Enter Credit_request:")
+credit_request.place(x=800,y=122)
+pay_day= Calendar(root,selectmode="day", month=1, day =1,year=2023)
+pay_day.place(x=750, y=210)
+
+salary_l= Calendar(root,selectmode="day", year=2023, month=1, day =1)
+salary_l.place(x=750, y=450)
+salary=Label(root,text="Salary Day")
+salary.place(x=790,y=428)
+
+firstname =StringVar()
+lastname=StringVar()
+surname=StringVar()
+age=IntVar()
+phonenumber=StringVar()
+account_number=StringVar ()
+cardnumber_STR=StringVar()
+credit_request=StringVar()
+checkvar1 = StringVar()
+checkvar2 = StringVar()
+age1=StringVar()
+interest1=IntVar()
+controller_STR=StringVar()
+work_pc_STR=StringVar()
+occupation_STR=StringVar()
+netsalary_STR=StringVar()
+name_relat_STR=StringVar()
+name_relat_STR=StringVar()
+resental_STR=StringVar()
+clicked=StringVar()
+resental_STR=StringVar()
+spause_STR=StringVar()
+
+
+
+firstname_entry=Entry(textvariable =firstname)
+firstname_entry.place(x=10,y=200, width=350) 
+lastname_entry=Entry(textvariable =lastname)
+lastname_entry.place(x=10,y =265, width=350)
+surname_entry=Entry(textvariable =surname )
+surname_entry.place(x=10,y=335, width=350) 
+c1= Checkbutton(text = "Male", variable = checkvar1,onvalue = "Male" , offvalue = "" ,) 
+c1.deselect()
+c1.place(x=130,y=355)
+c2= Checkbutton(text = "Female", variable = checkvar2,onvalue = "Female" , offvalue = "" ,)
+c2.deselect()
+c2.place(x=190,y=355)
+age_entry=Entry(textvariable =age1)
+age_entry.place(x=100,y=390, width=40)
+interest_entry=Entry(textvariable=interest1)
+interest_entry.place(x=800,y=95,width=80)
+id_entry=Entry(textvariable=id)
+id_entry.place(x=10,y=437, width =350)
+  
+account_entry=Entry(textvariable=account_number) 
+account_entry.place(x=10,y=485, width=350)
+cardnumber_entry=Entry(root,textvariable=cardnumber_STR)
+cardnumber_entry.place(x=10,y=530,width=345)
+phonenumber= Entry(root, textvariable="phone_number")
+phonenumber.place(x=10,y=665, width=350)
+controller_entry= Entry(root,textvariable=controller_STR)
+controller_entry.place(x=400,y=105,width=350)
+work_pc_entry= Entry(root,textvariable=work_pc_STR)
+work_pc_entry.place(x=400,y=175,width=350)
+occupation_entry=Entry(root,textvariable= occupation_STR)
+occupation_entry.place(x=400,y=228,width=330)
+netsalary_entry= Entry(root,textvariable=netsalary_STR)
+netsalary_entry.place(x=400,y=278)
+name_relat_entry=Entry(root,textvariable=name_relat_STR)
+name_relat_entry.place(x=400,y=325,width=340)
+
+spause_entry = Entry(root,textvariable=spause_STR)
+spause_entry.place(x=400,y=373,width=340)
+
+texxt= Entry(root,textvariable=resental_STR)
+texxt.place(x=400,y=430,width=340)
+
+
+
+    
+options=[
+    "Select Bank Branch",
+    "African Bank",
+    "Capitec Bank",
+    "Absa Bank",
+    "Nedbank",
+    "Standard Bank",
+    ]
+
+
+clicked.set(options[0])    
+    
+drop= OptionMenu(root,clicked,*options)
+
+drop.place(x=10,y= 570)
+
+           
+
+
+
+
+
+
+credit_entry=Entry (textvariable =credit_request)
+credit_entry.place(x=800, y=140, width=150,) 
+button=Button(text ="Submit", command=write)
+button.place(x=450,y=620)
+
+def info():
+   messagebox.showinfo("Loan Entry Application","Please Fill In Acordingly")
+
+
+b= Button(root, text ="info", relief=RAISED, command=info, bitmap="info")
+b.place(x=10, y=105)
+
+
+
+footer=Label(root, text="",  bg="grey",fg="black", width="500", height="2") 
+footer.place(x=0,y=1390)
+root.mainloop()
+
